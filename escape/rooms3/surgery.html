@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>세 번째 방 - 수술실</title>
+  <link rel="stylesheet" href="../style.css" />
+  <script src="../inventory.js"></script>
+  <script src="../journal.js"></script>
+</head>
+<body>
+  <div class="game-layout">
+    <!-- 왼쪽 게임 영역 -->
+    <div class="game-area">
+      <!-- 그림 영역 -->
+      <div class="image-area">
+        <img src="../IMG/수술실.png" alt="수술실" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;">
+      </div>
+
+      <!-- 게임 컨테이너 -->
+      <div id="game-container">
+        <div id="scene-text">
+          차가운 수술실에 도착했습니다. 수술대, 뇌파 단말기, 그리고 꺼진 전원 스위치들이 보입니다. 
+          스위치 중 하나가 빠져있는 것 같습니다. 이곳에서 무슨 일이 일어났던 걸까요?
+        </div>
+        
+        <div id="options">
+          <button onclick="toggleSwitch('red')" class="game-button">
+            <span class="button-icon">🔴</span>
+            <span class="button-text">빨간 스위치를 누른다</span>
+          </button>
+          <button onclick="toggleSwitch('blue')" class="game-button">
+            <span class="button-icon">🔵</span>
+            <span class="button-text">파란 스위치를 누른다</span>
+          </button>
+          <button onclick="toggleSwitch('green')" class="game-button">
+            <span class="button-icon">🟢</span>
+            <span class="button-text">초록 스위치를 누른다</span>
+          </button>
+          <button onclick="inspect('missingSwitch')" class="game-button">
+            <span class="button-icon">🔍</span>
+            <span class="button-text">빠진 스위치를 찾는다</span>
+          </button>
+          <button onclick="insertChip()" class="game-button primary">
+            <span class="button-icon">💾</span>
+            <span class="button-text">데이터 칩을 삽입한다</span>
+          </button>
+        </div>
+
+        <div id="choice-buttons" style="display: none;">
+          <div class="choice-container">
+            <h3 style="color: #4a9eff; margin-bottom: 20px;">💭 기억의 선택</h3>
+            <p style="margin-bottom: 25px; color: #e8f4fd; font-size: 16px; line-height: 1.6;">
+              이 기억은 당신의 것입니까? 과거의 기억이 당신을 괴롭힙니다.
+            </p>
+            <div class="choice-buttons">
+              <button onclick="choose('accept')" class="game-button primary">
+                <span class="button-icon">✅</span>
+                <span class="button-text">받아들인다</span>
+              </button>
+              <button onclick="choose('reject')" class="game-button secondary">
+                <span class="button-icon">❌</span>
+                <span class="button-text">거부한다</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id="message" class="message-display"></div>
+      </div>
+    </div>
+
+    <!-- 오른쪽 사이드바 -->
+    <div class="sidebar">
+      <!-- 인벤토리와 일지가 여기에 자동으로 추가됩니다 -->
+    </div>
+  </div>
+
+  <style>
+    .game-button {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: linear-gradient(135deg, rgba(74, 158, 255, 0.2) 0%, rgba(41, 128, 185, 0.2) 100%);
+      border: 2px solid rgba(74, 158, 255, 0.4);
+      border-radius: 12px;
+      padding: 16px 20px;
+      color: #e8f4fd;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      margin: 8px 0;
+      width: 100%;
+      text-align: left;
+    }
+
+    .game-button:hover {
+      background: linear-gradient(135deg, rgba(74, 158, 255, 0.3) 0%, rgba(41, 128, 185, 0.3) 100%);
+      border-color: rgba(74, 158, 255, 0.6);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(74, 158, 255, 0.3);
+    }
+
+    .game-button.primary {
+      background: linear-gradient(135deg, #4a9eff 0%, #2980b9 100%);
+      border-color: #4a9eff;
+      color: white;
+      text-align: center;
+      justify-content: center;
+    }
+
+    .game-button.primary:hover {
+      background: linear-gradient(135deg, #5ba9ff 0%, #3a90ca 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(74, 158, 255, 0.4);
+    }
+
+    .game-button.secondary {
+      background: linear-gradient(135deg, rgba(108, 117, 125, 0.2) 0%, rgba(73, 80, 87, 0.2) 100%);
+      border-color: rgba(108, 117, 125, 0.4);
+    }
+
+    .game-button.secondary:hover {
+      background: linear-gradient(135deg, rgba(108, 117, 125, 0.3) 0%, rgba(73, 80, 87, 0.3) 100%);
+      border-color: rgba(108, 117, 125, 0.6);
+    }
+
+    .button-icon {
+      font-size: 18px;
+      min-width: 24px;
+    }
+
+    .button-text {
+      flex: 1;
+    }
+
+    .choice-container {
+      background: linear-gradient(145deg, rgba(26, 26, 46, 0.9) 0%, rgba(22, 33, 62, 0.9) 100%);
+      border: 2px solid rgba(74, 158, 255, 0.4);
+      border-radius: 20px;
+      padding: 30px;
+      margin: 20px 0;
+      backdrop-filter: blur(15px);
+      text-align: center;
+    }
+
+    .choice-buttons {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .choice-buttons .game-button {
+      width: auto;
+      min-width: 150px;
+    }
+
+    .message-display {
+      background: linear-gradient(135deg, rgba(74, 158, 255, 0.1) 0%, rgba(41, 128, 185, 0.1) 100%);
+      border: 1px solid rgba(74, 158, 255, 0.3);
+      border-radius: 15px;
+      padding: 20px;
+      margin: 20px 0;
+      text-align: center;
+      color: #4a9eff;
+      font-weight: 600;
+      min-height: 20px;
+      backdrop-filter: blur(10px);
+    }
+
+    #scene-text {
+      background: linear-gradient(135deg, rgba(74, 158, 255, 0.1) 0%, rgba(41, 128, 185, 0.1) 100%);
+      border: 1px solid rgba(74, 158, 255, 0.3);
+      border-radius: 15px;
+      padding: 25px;
+      margin: 20px 0;
+      color: #e8f4fd;
+      font-size: 16px;
+      line-height: 1.6;
+      backdrop-filter: blur(10px);
+    }
+  </style>
+
+  <script src="surgery.js"></script>
+</body>
+</html>

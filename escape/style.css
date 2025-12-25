@@ -1,0 +1,1173 @@
+body {
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+    color: #e8f4fd;
+    font-family: 'Segoe UI', 'Roboto', 'Noto Sans KR', sans-serif;
+    padding: 0;
+    margin: 0;
+    min-height: 100vh;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  
+  /* 메인 레이아웃 */
+  .game-layout {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    grid-template-rows: 1fr;
+    height: 100vh;
+    gap: 0;
+  }
+
+  /* 왼쪽 게임 영역 */
+  .game-area {
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+    position: relative;
+    gap: 20px;
+  }
+
+  /* 그림 영역 */
+  .image-area {
+    flex: 2;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
+    border-radius: 20px;
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(74, 158, 255, 0.3);
+    min-height: 400px;
+    max-height: 500px;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+  }
+
+  .image-area:hover {
+    border-color: rgba(74, 158, 255, 0.5);
+    box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.1), 0 12px 24px rgba(74, 158, 255, 0.2);
+  }
+
+  .image-area::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 40%, rgba(74, 158, 255, 0.05) 50%, transparent 60%);
+    animation: imageShimmer 4s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  @keyframes imageShimmer {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.8; }
+  }
+
+  .image-placeholder {
+    color: #8899aa;
+    font-size: 20px;
+    text-align: center;
+    opacity: 0.7;
+    line-height: 1.6;
+    padding: 20px;
+  }
+
+  /* 실제 이미지가 들어갈 때의 스타일 */
+  .image-area img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 18px;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  }
+
+  .image-area img:hover {
+    transform: scale(1.02);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+  }
+
+  /* 이미지가 있을 때 플레이스홀더 숨기기 */
+  .image-area:has(img) .image-placeholder {
+    display: none;
+  }
+
+  /* 이미지가 있을 때 shimmer 효과 제거 */
+  .image-area:has(img)::before {
+    display: none;
+  }
+
+  /* 이미지 로딩 상태 */
+  .image-area.loading {
+    background: linear-gradient(135deg, rgba(74, 158, 255, 0.1) 0%, rgba(41, 128, 185, 0.1) 100%);
+  }
+
+  .image-area.loading::after {
+    content: '🖼️';
+    font-size: 48px;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.1); }
+  }
+  
+  #game-container {
+    background: linear-gradient(145deg, #1e1e2e 0%, #2d2d44 100%);
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #game-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #4a9eff, #2980b9, #4a9eff);
+    background-size: 200% 100%;
+    animation: shimmer 3s ease-in-out infinite;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  #scene-text {
+    font-size: 1.15em;
+    line-height: 1.8;
+    margin-bottom: 20px;
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
+    border-radius: 16px;
+    border-left: 5px solid #4a9eff;
+    box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(0, 0, 0, 0.1);
+    position: relative;
+    backdrop-filter: blur(10px);
+  }
+
+  #scene-text::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent 30%, rgba(74, 158, 255, 0.03) 50%, transparent 70%);
+    pointer-events: none;
+  }
+  
+  #options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 14px;
+    margin: 20px 0;
+    padding: 18px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+  }
+
+  #options button {
+    padding: 18px 24px;
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    border: none;
+    color: #ecf0f1;
+    cursor: pointer;
+    border-radius: 16px;
+    font-size: 15px;
+    font-weight: 600;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  #options button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.6s;
+  }
+  
+  #options button:hover {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 12px 30px rgba(52, 152, 219, 0.4);
+    border-color: rgba(74, 158, 255, 0.5);
+  }
+
+  #options button:hover::before {
+    left: 100%;
+  }
+
+  #options button:active {
+    transform: translateY(-2px) scale(0.98);
+    transition: all 0.1s ease;
+  }
+
+  /* 선택지 버튼 그룹별 스타일 */
+  #options button:nth-child(odd) {
+    background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+  }
+
+  #options button:nth-child(even) {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  }
+
+  /* 특별한 액션 버튼 스타일 */
+  #options button:last-child {
+    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+    border-color: rgba(46, 204, 113, 0.3);
+  }
+
+  #options button:last-child:hover {
+    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+    box-shadow: 0 12px 30px rgba(46, 204, 113, 0.4);
+    border-color: rgba(46, 204, 113, 0.5);
+  }
+  
+  #code-input {
+    margin-top: 30px;
+    padding: 25px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
+    border-radius: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  #code-input::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, #27ae60, #2ecc71, #27ae60);
+    background-size: 200% 100%;
+    animation: codeShimmer 2s ease-in-out infinite;
+  }
+
+  @keyframes codeShimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  #code-input input {
+    padding: 14px 18px;
+    font-size: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #ecf0f1;
+    width: 200px;
+    margin-right: 15px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(5px);
+  }
+
+  #code-input input:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 20px rgba(52, 152, 219, 0.4);
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  #code-input button {
+    padding: 14px 22px;
+    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+    border: none;
+    color: white;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-right: 10px;
+    box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+    border: 2px solid rgba(46, 204, 113, 0.3);
+  }
+
+  #code-input button:hover {
+    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(46, 204, 113, 0.4);
+    border-color: rgba(46, 204, 113, 0.5);
+  }
+
+  #code-input button:active {
+    transform: translateY(-1px) scale(1.02);
+    transition: all 0.1s ease;
+  }
+  
+  #message {
+    margin-top: 25px;
+    font-weight: 600;
+    color: #2ecc71;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, rgba(46, 204, 113, 0.15) 0%, rgba(46, 204, 113, 0.05) 100%);
+    border-radius: 12px;
+    border-left: 5px solid #2ecc71;
+    min-height: 20px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 12px rgba(46, 204, 113, 0.2);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* 선택지 버튼 스타일 */
+  #choice-buttons {
+    margin-top: 30px;
+    padding: 25px;
+    background: linear-gradient(145deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 193, 7, 0.05) 100%);
+    border-radius: 16px;
+    border: 2px solid rgba(255, 193, 7, 0.3);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    text-align: center;
+  }
+
+  #choice-buttons p {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #ffc107;
+    margin-bottom: 20px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  #choice-buttons button {
+    background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+    color: white;
+    border: none;
+    padding: 16px 32px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    margin: 0 10px;
+    box-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  #choice-buttons button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(255, 193, 7, 0.4);
+    background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+  }
+
+  #choice-buttons button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(255, 193, 7, 0.3);
+  }
+
+  #message::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent 70%, rgba(46, 204, 113, 0.1) 100%);
+    pointer-events: none;
+  }
+
+  /* 오른쪽 사이드바 */
+  .sidebar {
+    background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+    border-left: 2px solid rgba(74, 158, 255, 0.3);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-y: auto;
+  }
+
+  /* 인벤토리 스타일 - 사이드바에 통합 */
+  .inventory-container {
+    background: linear-gradient(145deg, rgba(74, 158, 255, 0.1) 0%, rgba(41, 128, 185, 0.1) 100%);
+    border: 2px solid rgba(74, 158, 255, 0.3);
+    border-radius: 15px;
+    padding: 12px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+  }
+
+  .inventory-container:hover {
+    /* 호버 시 UI 크기 변화 방지 */
+    border-color: rgba(74, 158, 255, 0.5);
+    box-shadow: 0 10px 25px rgba(74, 158, 255, 0.2);
+    transform: none;
+    width: auto;
+    height: auto;
+  }
+
+  .inventory-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(74, 158, 255, 0.2);
+  }
+
+  .inventory-title {
+    font-weight: 700;
+    color: #4a9eff;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .inventory-toggle {
+    background: linear-gradient(135deg, #4a9eff 0%, #2980b9 100%);
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 6px 10px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(74, 158, 255, 0.3);
+  }
+
+  .inventory-toggle:hover {
+    background: linear-gradient(135deg, #2980b9 0%, #4a9eff 100%);
+    transform: scale(1.1);
+    box-shadow: 0 5px 15px rgba(74, 158, 255, 0.4);
+  }
+
+  .inventory-content {
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 5px;
+  }
+
+  .inventory-content::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .inventory-content::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+  }
+
+  .inventory-content::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #4a9eff 0%, #2980b9 100%);
+    border-radius: 2px;
+  }
+
+  .inventory-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    margin: 6px 0;
+    background: linear-gradient(135deg, rgba(74, 158, 255, 0.1) 0%, rgba(41, 128, 185, 0.1) 100%);
+    border-radius: 10px;
+    border: 1px solid rgba(74, 158, 255, 0.2);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    animation: slideInRight 0.3s ease-out;
+  }
+
+  .inventory-item:hover {
+    background: linear-gradient(135deg, rgba(74, 158, 255, 0.2) 0%, rgba(41, 128, 185, 0.2) 100%);
+    /* 호버 시 크기 변화 방지 */
+    transform: translateX(3px);
+    border-color: rgba(74, 158, 255, 0.4);
+    box-shadow: 0 4px 12px rgba(74, 158, 255, 0.2);
+  }
+
+  .item-name {
+    font-size: 13px;
+    color: #e8f4fd;
+    flex: 1;
+    font-weight: 500;
+  }
+
+  .item-count {
+    background: linear-gradient(135deg, #4a9eff 0%, #2980b9 100%);
+    color: white;
+    border-radius: 15px;
+    padding: 3px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    min-width: 20px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(74, 158, 255, 0.3);
+  }
+
+  .inventory-empty {
+    text-align: center;
+    color: #8899aa;
+    font-style: italic;
+    font-size: 13px;
+    padding: 30px 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    border: 2px dashed rgba(74, 158, 255, 0.3);
+  }
+
+  .inventory-minimized .inventory-content {
+    display: none;
+  }
+
+  .inventory-minimized .inventory-header {
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+
+  /* 일지 시스템 */
+  .journal-container {
+    background: linear-gradient(145deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 152, 0, 0.1) 100%);
+    border: 2px solid rgba(255, 193, 7, 0.3);
+    border-radius: 15px;
+    padding: 15px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+  }
+
+  .journal-container:hover {
+    /* 호버 시 UI 크기 변화 방지 */
+    border-color: rgba(255, 193, 7, 0.5);
+    box-shadow: 0 10px 25px rgba(255, 193, 7, 0.2);
+    transform: none;
+    width: auto;
+    height: auto;
+  }
+
+  .journal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(255, 193, 7, 0.2);
+  }
+
+  .journal-title {
+    font-weight: 700;
+    color: #ffc107;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .journal-toggle {
+    background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 6px 10px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(255, 193, 7, 0.3);
+  }
+
+  .journal-toggle:hover {
+    background: linear-gradient(135deg, #ff9800 0%, #ffc107 100%);
+    transform: scale(1.1);
+    box-shadow: 0 5px 15px rgba(255, 193, 7, 0.4);
+  }
+
+  .journal-content {
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 5px;
+  }
+
+  .journal-content::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .journal-content::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+  }
+
+  .journal-content::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+    border-radius: 2px;
+  }
+
+  .journal-entry {
+    padding: 10px 12px;
+    margin: 6px 0;
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 152, 0, 0.1) 100%);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 193, 7, 0.2);
+    transition: all 0.3s ease;
+    animation: slideInRight 0.3s ease-out;
+  }
+
+  .journal-entry:hover {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.2) 0%, rgba(255, 152, 0, 0.2) 100%);
+    border-color: rgba(255, 193, 7, 0.4);
+    box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+    /* 호버 시 크기 변화 방지 */
+    transform: none;
+    scale: 1;
+  }
+
+  .journal-entry-date {
+    font-size: 11px;
+    color: #ffc107;
+    font-weight: 600;
+    margin-bottom: 5px;
+    opacity: 0.8;
+  }
+
+  .journal-entry-text {
+    font-size: 12px;
+    color: #e8f4fd;
+    line-height: 1.4;
+  }
+
+  .journal-empty {
+    text-align: center;
+    color: #8899aa;
+    font-style: italic;
+    font-size: 13px;
+    padding: 30px 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    border: 2px dashed rgba(255, 193, 7, 0.3);
+  }
+
+  .journal-minimized .journal-content {
+    display: none;
+  }
+
+  .journal-minimized .journal-header {
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+
+  /* 아이템 정보 창 스타일 */
+  #item-info {
+    background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%) !important;
+    border: 2px solid rgba(74, 158, 255, 0.4) !important;
+    border-radius: 20px !important;
+    padding: 30px !important;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(15px) !important;
+  }
+
+  #item-info h3 {
+    color: #4a9eff !important;
+    font-size: 20px !important;
+    margin-bottom: 15px !important;
+    font-weight: 700 !important;
+  }
+
+  #item-info p {
+    color: #e8f4fd !important;
+    font-size: 16px !important;
+    line-height: 1.6 !important;
+    margin-bottom: 25px !important;
+  }
+
+  #item-info button {
+    background: linear-gradient(135deg, #4a9eff 0%, #2980b9 100%) !important;
+    color: white !important;
+    border: none !important;
+    padding: 12px 24px !important;
+    border-radius: 10px !important;
+    cursor: pointer !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+  }
+
+  #item-info button:hover {
+    background: linear-gradient(135deg, #2980b9 0%, #4a9eff 100%) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 5px 15px rgba(74, 158, 255, 0.3) !important;
+  }
+
+  /* 반응형 디자인 */
+  @media (max-width: 1200px) {
+    .game-layout {
+      grid-template-columns: 1fr 300px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .game-layout {
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr auto;
+    }
+
+    .sidebar {
+      border-left: none;
+      border-top: 2px solid rgba(74, 158, 255, 0.3);
+      max-height: 300px;
+    }
+
+    .game-area {
+      padding: 15px;
+    }
+
+    #game-container {
+      padding: 20px;
+    }
+
+    #options button {
+      padding: 14px 18px;
+      font-size: 14px;
+    }
+
+    #scene-text {
+      font-size: 1em;
+      padding: 18px;
+    }
+
+    .image-area {
+      min-height: 250px;
+      max-height: 350px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .game-area {
+      padding: 10px;
+    }
+
+    #game-container {
+      padding: 15px;
+    }
+
+    .sidebar {
+      padding: 15px;
+    }
+
+    .image-area {
+      min-height: 200px;
+      max-height: 250px;
+    }
+  }
+
+  /* 애니메이션 */
+  @keyframes fadeInScale {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.8);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+
+  @keyframes fadeOutScale {
+    from {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.8);
+    }
+  }
+
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  /* 버튼 클릭 효과 */
+  .inventory-item:active,
+  .journal-entry:active {
+    transform: scale(0.98);
+  }
+
+  /* 힌트 인벤토리 스타일 */
+  .hint-inventory-container {
+    background: linear-gradient(145deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 152, 0, 0.1) 100%);
+    border: 2px solid rgba(255, 193, 7, 0.3);
+    border-radius: 15px;
+    padding: 12px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+  }
+
+  .hint-inventory-container:hover {
+    /* 호버 시 UI 크기 변화 방지 */
+    border-color: rgba(255, 193, 7, 0.5);
+    box-shadow: 0 10px 25px rgba(255, 193, 7, 0.2);
+    transform: none;
+    width: auto;
+    height: auto;
+  }
+
+  .hint-inventory-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(255, 193, 7, 0.2);
+  }
+
+  .hint-inventory-title {
+    font-weight: 700;
+    color: #ffc107;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .hint-inventory-toggle {
+    background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 6px 10px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(255, 193, 7, 0.3);
+  }
+
+  .hint-inventory-toggle:hover {
+    background: linear-gradient(135deg, #ff9800 0%, #ffc107 100%);
+    transform: scale(1.1);
+    box-shadow: 0 5px 15px rgba(255, 193, 7, 0.4);
+  }
+
+  .hint-inventory-content {
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 5px;
+  }
+
+  .hint-inventory-content::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .hint-inventory-content::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+  }
+
+  .hint-inventory-content::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+    border-radius: 2px;
+  }
+
+  .hint-inventory-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    margin: 6px 0;
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 152, 0, 0.1) 100%);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 193, 7, 0.2);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    animation: slideInRight 0.3s ease-out;
+  }
+
+  .hint-inventory-item:hover {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.2) 0%, rgba(255, 152, 0, 0.2) 100%);
+    border-color: rgba(255, 193, 7, 0.4);
+    box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+    /* 호버 시 크기 변화 방지 */
+    transform: translateX(3px);
+  }
+
+  .hint-item-name {
+    font-size: 13px;
+    color: #e8f4fd;
+    flex: 1;
+    font-weight: 500;
+  }
+
+  .hint-item-count {
+    background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+    color: white;
+    border-radius: 15px;
+    padding: 3px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    min-width: 20px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(255, 193, 7, 0.3);
+  }
+
+  .hint-inventory-empty {
+    text-align: center;
+    color: #8899aa;
+    font-style: italic;
+    font-size: 13px;
+    padding: 30px 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    border: 2px dashed rgba(255, 193, 7, 0.3);
+  }
+
+  .hint-inventory-minimized .hint-inventory-content {
+    display: none;
+  }
+
+  .hint-inventory-minimized .hint-inventory-header {
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+
+  /* 추가 스타일 */
+  .video-box, .log {
+    margin: 20px 0;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    border-left: 4px solid #ffc107;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .puzzle {
+    margin: 20px 0;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .puzzle input[type="text"] {
+    padding: 10px;
+    font-size: 16px;
+    width: 60%;
+    border-radius: 5px;
+    border: none;
+    margin-right: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #ecf0f1;
+  }
+
+  .puzzle input[type="text"]:focus {
+    outline: none;
+    border: 2px solid #3498db;
+    box-shadow: 0 0 15px rgba(52, 152, 219, 0.3);
+  }
+
+  .puzzle button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background: linear-gradient(135deg, #4466aa 0%, #6688cc 100%);
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-right: 8px;
+  }
+
+  .puzzle button:hover {
+    background: linear-gradient(135deg, #6688cc 0%, #4466aa 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(68, 102, 170, 0.3);
+  }
+
+  .puzzle .message {
+    margin-top: 15px;
+    font-weight: bold;
+    min-height: 30px;
+  }
+
+  .choices button {
+    display: block;
+    margin: 10px 0;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #444 0%, #666 100%);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+  }
+
+  .choices button:hover {
+    background: linear-gradient(135deg, #666 0%, #444 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  }
+
+  .reaction {
+    margin-top: 30px;
+    font-style: italic;
+    font-size: 1.2em;
+    opacity: 0;
+    transition: opacity 1.5s;
+    color: #ffc107;
+  }
+
+  .shake {
+    animation: shake 0.5s;
+  }
+
+  @keyframes shake {
+    0% { transform: translate(0px, 0px); }
+    20% { transform: translate(-5px, 0px); }
+    40% { transform: translate(5px, 0px); }
+    60% { transform: translate(-5px, 0px); }
+    80% { transform: translate(5px, 0px); }
+    100% { transform: translate(0px, 0px); }
+  }
+
+  /* 중요보관함과 일반 보관함 구분 스타일 */
+  .important-section, .normal-section {
+    margin-bottom: 20px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border-left: 3px solid;
+  }
+
+  .important-section .section-header {
+    border-left-color: #ffc107;
+  }
+
+  .normal-section .section-header {
+    border-left-color: #4a9eff;
+  }
+
+  .section-icon {
+    font-size: 16px;
+    margin-right: 8px;
+    opacity: 0.8;
+  }
+
+  .section-title {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .important-section .section-title {
+    color: #ffc107;
+  }
+
+  .normal-section .section-title {
+    color: #4a9eff;
+  }
+
+  .important-items-container, .normal-items-container {
+    margin-left: 8px;
+  }
+
+  .important-inventory-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 10px;
+    margin: 4px 0;
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 152, 0, 0.1) 100%);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 193, 7, 0.2);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    animation: slideInRight 0.3s ease-out;
+  }
+
+  .important-inventory-item:hover {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.2) 0%, rgba(255, 152, 0, 0.2) 100%);
+    border-color: rgba(255, 193, 7, 0.4);
+    box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+    transform: translateX(3px);
+  }
+
+  .important-item-name {
+    font-size: 12px;
+    color: #ffc107;
+    flex: 1;
+    font-weight: 500;
+  }
+
+  .important-item-count {
+    background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+    color: white;
+    border-radius: 12px;
+    padding: 2px 6px;
+    font-size: 10px;
+    font-weight: 600;
+    min-width: 18px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(255, 193, 7, 0.3);
+  }
+
+  .important-empty {
+    text-align: center;
+    color: #8899aa;
+    font-style: italic;
+    font-size: 12px;
+    padding: 15px 10px;
+    background: rgba(255, 193, 7, 0.05);
+    border-radius: 8px;
+    border: 1px dashed rgba(255, 193, 7, 0.2);
+  }
+  

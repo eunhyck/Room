@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>관찰실 - 과거의 기억</title>
+  <link rel="stylesheet" href="../style.css" />
+  <script src="../inventory.js"></script>
+  <script src="../journal.js"></script>
+</head>
+<body>
+  <div class="game-layout">
+    <!-- 왼쪽 게임 영역 -->
+    <div class="game-area">
+      <!-- 그림 영역 -->
+      <div class="image-area">
+        <img src="../IMG/관찰실.png" alt="관찰실" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;">
+      </div>
+
+      <!-- 게임 컨테이너 -->
+      <div id="game-container">
+        <div id="scene-text">
+          관찰실에 도착했습니다. 커다란 유리창 너머에는 과거의 당신이 누군가를 고문하거나 방관하고 있는 장면이 재생되고 있습니다. 
+          이 기억들이 진짜인지, 아니면 누군가가 조작한 것인지 모르겠습니다.
+        </div>
+
+        <div class="video-box">
+          <h3 style="color: #ff6b6b; margin-bottom: 15px;">📹 [영상 재생]</h3>
+          <p style="color: #e8f4fd; line-height: 1.6;">
+            "피실험체 017, 감정 반응 억제 테스트 실패. 재교육 필요. 
+            실험체의 폭력성 증가로 인해 격리 조치가 시급합니다."
+          </p>
+        </div>
+
+        <div class="log">
+          <h3 style="color: #4a9eff; margin-bottom: 15px;">📋 [실험 기록]</h3>
+          <div style="color: #e8f4fd; line-height: 1.6;">
+            <p><strong>▪ 실험일지:</strong> 017은 감정 억제 실패 시 폭력성이 급증함.</p>
+            <p><strong>▪ 연구자 코멘트:</strong> "이건 무언가 잘못됐어... 우린 괴물을 만든 걸까?"</p>
+            <p><strong>▪ 보안 등급:</strong> 최상위 보안 시설로 격리 필요</p>
+          </div>
+        </div>
+
+        <div class="choice-section">
+          <h2 style="color: #e8f4fd; margin: 30px 0 20px 0; text-align: center;">💭 당신의 반응은?</h2>
+          <div id="options" class="choices">
+            <button onclick="selectPath('empathy')" class="game-button empathy">
+              <span class="button-icon">💙</span>
+              <span class="button-text">"그들을 이해할 수 있어… 난 그저 이용당한 존재일 뿐이야."</span>
+            </button>
+            <button onclick="selectPath('anger')" class="game-button anger">
+              <span class="button-icon">💢</span>
+              <span class="button-text">"이건 누군가의 잘못이야… 반드시 되갚아주겠어."</span>
+            </button>
+            <button onclick="selectPath('despair')" class="game-button despair">
+              <span class="button-icon">😔</span>
+              <span class="button-text">"…난 결국 괴물이었어. 돌이킬 수 없어."</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="reaction" id="reactionText"></div>
+        <div style="margin-top: 20px; text-align: center;">
+          <button id="continueBtn" style="display:none;" onclick="goNext()" class="game-button primary">
+            <span class="button-icon">➡️</span>
+            <span class="button-text">계속</span>
+          </button>
+        </div>
+
+        <div id="message" class="message-display"></div>
+      </div>
+    </div>
+
+    <!-- 오른쪽 사이드바 -->
+    <div class="sidebar">
+      <!-- 인벤토리와 일지가 여기에 자동으로 추가됩니다 -->
+    </div>
+  </div>
+
+  <style>
+    .game-button {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: linear-gradient(135deg, rgba(74, 158, 255, 0.2) 0%, rgba(41, 128, 185, 0.2) 100%);
+      border: 2px solid rgba(74, 158, 255, 0.4);
+      border-radius: 12px;
+      padding: 16px 20px;
+      color: #e8f4fd;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      margin: 8px 0;
+      width: 100%;
+      text-align: left;
+    }
+
+    .game-button:hover {
+      background: linear-gradient(135deg, rgba(74, 158, 255, 0.3) 0%, rgba(41, 128, 185, 0.3) 100%);
+      border-color: rgba(74, 158, 255, 0.6);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(74, 158, 255, 0.3);
+    }
+
+    .game-button.primary {
+      background: linear-gradient(135deg, #4a9eff 0%, #2980b9 100%);
+      border-color: #4a9eff;
+      color: white;
+      text-align: center;
+      justify-content: center;
+      width: auto;
+      min-width: 150px;
+    }
+
+    .game-button.primary:hover {
+      background: linear-gradient(135deg, #5ba9ff 0%, #3a90ca 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(74, 158, 255, 0.4);
+    }
+
+    .game-button.empathy {
+      background: linear-gradient(135deg, rgba(100, 181, 246, 0.2) 0%, rgba(33, 150, 243, 0.2) 100%);
+      border-color: rgba(100, 181, 246, 0.4);
+    }
+
+    .game-button.empathy:hover {
+      background: linear-gradient(135deg, rgba(100, 181, 246, 0.3) 0%, rgba(33, 150, 243, 0.3) 100%);
+      border-color: rgba(100, 181, 246, 0.6);
+    }
+
+    .game-button.anger {
+      background: linear-gradient(135deg, rgba(239, 83, 80, 0.2) 0%, rgba(211, 47, 47, 0.2) 100%);
+      border-color: rgba(239, 83, 80, 0.4);
+    }
+
+    .game-button.anger:hover {
+      background: linear-gradient(135deg, rgba(239, 83, 80, 0.3) 0%, rgba(211, 47, 47, 0.3) 100%);
+      border-color: rgba(239, 83, 80, 0.6);
+    }
+
+    .game-button.despair {
+      background: linear-gradient(135deg, rgba(156, 39, 176, 0.2) 0%, rgba(123, 31, 162, 0.2) 100%);
+      border-color: rgba(156, 39, 176, 0.4);
+    }
+
+    .game-button.despair:hover {
+      background: linear-gradient(135deg, rgba(156, 39, 176, 0.3) 0%, rgba(123, 31, 162, 0.3) 100%);
+      border-color: rgba(156, 39, 176, 0.6);
+    }
+
+    .button-icon {
+      font-size: 18px;
+      min-width: 24px;
+    }
+
+    .button-text {
+      flex: 1;
+    }
+
+    .video-box {
+      background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(220, 53, 69, 0.1) 100%);
+      border: 2px solid rgba(255, 107, 107, 0.3);
+      border-radius: 15px;
+      padding: 20px;
+      margin: 20px 0;
+      backdrop-filter: blur(10px);
+    }
+
+    .log {
+      background: linear-gradient(135deg, rgba(74, 158, 255, 0.1) 0%, rgba(41, 128, 185, 0.1) 100%);
+      border: 2px solid rgba(74, 158, 255, 0.3);
+      border-radius: 15px;
+      padding: 20px;
+      margin: 20px 0;
+      backdrop-filter: blur(10px);
+    }
+
+    .choice-section {
+      background: linear-gradient(145deg, rgba(26, 26, 46, 0.9) 0%, rgba(22, 33, 62, 0.9) 100%);
+      border: 2px solid rgba(74, 158, 255, 0.4);
+      border-radius: 20px;
+      padding: 30px;
+      margin: 20px 0;
+      backdrop-filter: blur(15px);
+    }
+
+    .choices {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .reaction {
+      background: linear-gradient(135deg, rgba(74, 158, 255, 0.1) 0%, rgba(41, 128, 185, 0.1) 100%);
+      border: 1px solid rgba(74, 158, 255, 0.3);
+      border-radius: 15px;
+      padding: 20px;
+      margin: 20px 0;
+      text-align: center;
+      color: #4a9eff;
+      font-weight: 600;
+      min-height: 20px;
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .message-display {
+      background: linear-gradient(135deg, rgba(74, 158, 255, 0.1) 0%, rgba(41, 128, 185, 0.1) 100%);
+      border: 1px solid rgba(74, 158, 255, 0.3);
+      border-radius: 15px;
+      padding: 20px;
+      margin: 20px 0;
+      text-align: center;
+      color: #4a9eff;
+      font-weight: 600;
+      min-height: 20px;
+      backdrop-filter: blur(10px);
+    }
+
+    #scene-text {
+      background: linear-gradient(135deg, rgba(74, 158, 255, 0.1) 0%, rgba(41, 128, 185, 0.1) 100%);
+      border: 1px solid rgba(74, 158, 255, 0.3);
+      border-radius: 15px;
+      padding: 25px;
+      margin: 20px 0;
+      color: #e8f4fd;
+      font-size: 16px;
+      line-height: 1.6;
+      backdrop-filter: blur(10px);
+    }
+
+    /* 감정 상태별 스타일 */
+    body.empathy .reaction {
+      color: #64b5f6;
+      border-color: rgba(100, 181, 246, 0.3);
+    }
+
+    body.anger .reaction {
+      color: #ef5350;
+      border-color: rgba(239, 83, 80, 0.3);
+    }
+
+    body.despair .reaction {
+      color: #9c27b0;
+      border-color: rgba(156, 39, 176, 0.3);
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-10px); }
+      40%, 80% { transform: translateX(10px); }
+    }
+
+    .shake {
+      animation: shake 0.5s;
+    }
+  </style>
+
+  <script>
+    function resetObservation() {
+      const body = document.body;
+      const reaction = document.getElementById('reactionText');
+      body.classList.remove('empathy', 'anger', 'despair', 'shake');
+      if (reaction) {
+        reaction.textContent = '';
+        reaction.style.opacity = 0;
+      }
+      const c = document.getElementById('continueBtn');
+      if (c) c.style.display = 'none';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      resetObservation();
+    });
+
+    // BFCache로 복귀 시에도 중립 상태로 보장
+    window.addEventListener('pageshow', (ev) => {
+      if (ev.persisted) resetObservation();
+    });
+
+    function applyChoiceVisual(choice) {
+      const body = document.body;
+      const reaction = document.getElementById("reactionText");
+      localStorage.setItem("mentalState", choice);
+      body.classList.add(choice);
+      body.classList.add('shake');
+      
+      let message = "";
+      if (choice === "empathy") {
+        message = "당신은 그들의 고통을 이해합니다. 하지만 이것이 정당화될 수는 없습니다.";
+      } else if (choice === "anger") {
+        message = "분노가 가득합니다. 누군가가 이 모든 일의 책임을 져야 합니다.";
+      } else if (choice === "despair") {
+        message = "절망에 빠집니다. 과거의 잘못을 되돌릴 수 없다는 것이 괴롭습니다.";
+      }
+      
+      reaction.textContent = message;
+      reaction.style.opacity = 1;
+      
+      setTimeout(() => {
+        const continueBtn = document.getElementById('continueBtn');
+        if (continueBtn) continueBtn.style.display = 'inline-block';
+      }, 2000);
+    }
+
+    function selectPath(choice) {
+      applyChoiceVisual(choice);
+      addJournalEntry(`관찰실에서 ${choice === 'empathy' ? '공감' : choice === 'anger' ? '분노' : '절망'}의 선택을 했습니다.`, 'choice');
+      
+      // 실험자의 열쇠를 얻을 수 있는 기회 (특히 분노 상태일 때)
+      if (choice === 'anger' && Math.random() < 0.6 && !hasInImportantInventory('실험자의 열쇠')) {
+        setTimeout(() => {
+          const reaction = document.getElementById('reactionText');
+          reaction.innerHTML += '<br><br><span style="color: #ffc107;">💡 분노의 감정이 당신에게 실험자들의 열쇠를 찾는 힘을 주었습니다!</span>';
+          addToImportantInventory('실험자의 열쇠', 1);
+          addJournalEntry('분노의 감정이 실험자들의 마스터 열쇠를 찾는 힘을 주었다. 이 열쇠로 실험 시설의 모든 문을 열 수 있을 것 같다.', 'clue');
+        }, 3000);
+      }
+    }
+
+    function goNext() {
+      window.location.href = '../rooms5/isolation.html';
+    }
+  </script>
+</body>
+</html>

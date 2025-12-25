@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>진엔딩 - 복수의 완성</title>
+  <link rel="stylesheet" href="../style.css" />
+  <script src="../inventory.js"></script>
+  <script src="../journal.js"></script>
+</head>
+<body>
+  <div class="game-layout">
+    <!-- 왼쪽 게임 영역 -->
+    <div class="game-area">
+      <!-- 그림 영역 -->
+      <div class="image-area">
+        <img src="../IMG/트루엔딩.png" alt="진 엔딩" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;">
+      </div>
+
+      <!-- 게임 컨테이너 -->
+      <div id="game-container">
+        <div id="scene-text">
+          실험자의 열쇠를 사용하여 당신은 복수의 길을 선택했습니다. 이제 모든 것이 끝나는 순간입니다.
+        </div>
+
+        <div class="ending-content">
+          <div class="ending-text">
+            <h2 style="color: #f44336; margin-bottom: 20px;">⚔️ 복수의 완성</h2>
+            <p style="color: #e8f4fd; line-height: 1.8; margin-bottom: 20px;">
+              실험자의 열쇠를 사용하여 당신은 실험 시설의 모든 문을 열었습니다. 
+              기억 속에서 실험자들이 당신에게 가한 고통이 선명하게 떠오릅니다.
+            </p>
+            <p style="color: #e8f4fd; line-height: 1.8; margin-bottom: 20px;">
+              실험자들은 당신의 복수에 대한 두려움에 떨고 있습니다. 
+              그들이 만든 괴물이 이제 그들을 향해 돌아섰습니다.
+            </p>
+            <p style="color: #e8f4fd; line-height: 1.8; margin-bottom: 20px;">
+              당신은 실험자들을 하나씩 찾아내어 그들이 당신에게 가한 고통을 
+              똑같이 되돌려주었습니다. 이제 그들도 실험체가 되어 고통받게 됩니다.
+            </p>
+            <p style="color: #f44336; font-weight: 600; font-size: 18px;">
+              "이제 당신들이 실험체가 되어보세요. 고통의 의미를 제대로 알게 될 것입니다."
+            </p>
+          </div>
+
+          <div class="ending-actions">
+            <button onclick="restartGame()" class="game-button primary">
+              <span class="button-icon">🔄</span>
+              <span class="button-text">게임 다시 시작</span>
+            </button>
+            <button onclick="goToMain()" class="game-button secondary">
+              <span class="button-icon">🏠</span>
+              <span class="button-text">메인으로 돌아가기</span>
+            </button>
+          </div>
+        </div>
+
+        <div id="message" class="message-display"></div>
+      </div>
+    </div>
+
+    <!-- 오른쪽 사이드바 -->
+    <div class="sidebar">
+      <!-- 인벤토리와 일지가 여기에 자동으로 추가됩니다 -->
+    </div>
+  </div>
+
+  <style>
+    .ending-content {
+      background: linear-gradient(145deg, rgba(26, 26, 46, 0.9) 0%, rgba(22, 33, 62, 0.9) 100%);
+      border: 2px solid rgba(244, 67, 54, 0.4);
+      border-radius: 20px;
+      padding: 30px;
+      margin: 20px 0;
+      backdrop-filter: blur(15px);
+    }
+
+    .ending-text {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .ending-actions {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .game-button {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: linear-gradient(135deg, rgba(74, 158, 255, 0.2) 0%, rgba(41, 128, 185, 0.2) 100%);
+      border: 2px solid rgba(74, 158, 255, 0.4);
+      border-radius: 12px;
+      padding: 16px 24px;
+      color: #e8f4fd;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      min-width: 180px;
+      justify-content: center;
+    }
+
+    .game-button:hover {
+      background: linear-gradient(135deg, rgba(74, 158, 255, 0.3) 0%, rgba(41, 128, 185, 0.3) 100%);
+      border-color: rgba(74, 158, 255, 0.6);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(74, 158, 255, 0.3);
+    }
+
+    .game-button.primary {
+      background: linear-gradient(135deg, #4a9eff 0%, #2980b9 100%);
+      border-color: #4a9eff;
+      color: white;
+    }
+
+    .game-button.primary:hover {
+      background: linear-gradient(135deg, #5ba9ff 0%, #3a90ca 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(74, 158, 255, 0.4);
+    }
+
+    .game-button.secondary {
+      background: linear-gradient(135deg, rgba(108, 117, 125, 0.2) 0%, rgba(73, 80, 87, 0.2) 100%);
+      border-color: rgba(108, 117, 125, 0.4);
+    }
+
+    .game-button.secondary:hover {
+      background: linear-gradient(135deg, rgba(108, 117, 125, 0.3) 0%, rgba(73, 80, 87, 0.3) 100%);
+      border-color: rgba(108, 117, 125, 0.6);
+    }
+
+    .button-icon {
+      font-size: 18px;
+      min-width: 24px;
+    }
+
+    .button-text {
+      font-size: 16px;
+    }
+
+    .message-display {
+      background: linear-gradient(135deg, rgba(74, 158, 255, 0.1) 0%, rgba(41, 128, 185, 0.1) 100%);
+      border: 1px solid rgba(74, 158, 255, 0.3);
+      border-radius: 15px;
+      padding: 20px;
+      margin: 20px 0;
+      text-align: center;
+      color: #4a9eff;
+      font-weight: 600;
+      min-height: 20px;
+      backdrop-filter: blur(10px);
+    }
+
+    #scene-text {
+      background: linear-gradient(135deg, rgba(244, 67, 54, 0.1) 0%, rgba(211, 47, 47, 0.1) 100%);
+      border: 1px solid rgba(244, 67, 54, 0.3);
+      border-radius: 15px;
+      padding: 25px;
+      margin: 20px 0;
+      color: #e8f4fd;
+      font-size: 16px;
+      line-height: 1.6;
+      backdrop-filter: blur(10px);
+      text-align: center;
+    }
+
+    .fade-in {
+      animation: fadeIn 1.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+
+  <script>
+    function restartGame() {
+      // 게임 데이터 초기화
+      localStorage.clear();
+      
+      // 메인 페이지로 이동
+      window.location.href = '../rooms1/index.html';
+    }
+
+    function goToMain() {
+      // 메인 페이지로 이동 (데이터 유지)
+      window.location.href = '../rooms1/index.html';
+    }
+
+    // 페이지 로드 시 초기화
+    document.addEventListener('DOMContentLoaded', () => {
+      // 일반 아이템만 초기화 (중요 아이템은 유지)
+      if (window.inventory) {
+        window.inventory.clearNormalInventory();
+      }
+      
+      // 실험자의 열쇠가 있는지 확인
+      if (hasInImportantInventory('실험자의 열쇠')) {
+        addJournalEntry('진엔딩을 맞이했습니다. 실험자의 열쇠를 사용하여 복수에 성공했습니다.', 'ending');
+      } else {
+        // 열쇠가 없으면 배드엔딩으로 리다이렉트
+        addJournalEntry('실험자의 열쇠 없이 진엔딩에 접근했습니다. 배드엔딩으로 이동합니다.', 'ending');
+        setTimeout(() => {
+          window.location.href = 'bad_ending.html';
+        }, 2000);
+        return;
+      }
+      
+      // 페이드인 효과 적용
+      const endingContent = document.querySelector('.ending-content');
+      endingContent.classList.add('fade-in');
+    });
+  </script>
+</body>
+</html>

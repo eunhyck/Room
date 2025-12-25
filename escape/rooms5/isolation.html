@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>격리실 - 기억의 복원</title>
+  <link rel="stylesheet" href="../style.css" />
+  <script src="../inventory.js"></script>
+  <script src="../journal.js"></script>
+</head>
+<body>
+  <div class="game-layout">
+    <!-- 왼쪽 게임 영역 -->
+    <div class="game-area">
+      <!-- 그림 영역 -->
+      <div class="image-area">
+        <img src="../IMG/격리실.png" alt="격리실" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;">
+      </div>
+
+      <!-- 게임 컨테이너 -->
+      <div id="game-container">
+        <div id="scene-text">
+          깊은 어둠 속, 당신은 낯선 기계에 묶여 있습니다. 기억의 조각이 조작되고, 당신의 의지는 흔들립니다. 
+          이곳은 실험체들을 격리하고 기억을 조작하는 곳인 것 같습니다.
+        </div>
+        
+        <div class="puzzle">
+          <h3 style="color: #4a9eff; margin-bottom: 20px;">🧩 기억 조각 퍼즐</h3>
+          <p style="margin-bottom: 20px; color: #e8f4fd; line-height: 1.6;">
+            아래 단어들을 올바른 순서로 클릭하여 기억을 복원하세요. 
+            기계가 당신의 기억을 조작하려 하고 있습니다.
+          </p>
+          
+          <!-- 힌트 섹션 추가 -->
+          <div class="hint-section">
+            <button onclick="toggleHint()" class="hint-button">
+              <span class="button-icon">💡</span>
+              <span class="button-text">힌트 보기</span>
+            </button>
+            <div id="hint-content" class="hint-content" style="display: none;">
+              <h4 style="color: #4a9eff; margin-bottom: 15px;">🔍 기억 복원 가이드</h4>
+              <div class="hint-text">
+                <p style="color: #e8f4fd; margin-bottom: 10px;"><strong>1단계:</strong> "기억"부터 시작하세요</p>
+                <p style="color: #e8f4fd; margin-bottom: 10px;"><strong>2단계:</strong> "조작"이 다음입니다</p>
+                <p style="color: #e8f4fd; margin-bottom: 10px;"><strong>3단계:</strong> "실험"이 이어집니다</p>
+                <p style="color: #e8f4fd; margin-bottom: 10px;"><strong>4단계:</strong> "탈출"을 생각하세요</p>
+                <p style="color: #e8f4fd; margin-bottom: 10px;"><strong>5단계:</strong> "진실"을 찾으세요</p>
+                <p style="color: #e8f4fd; margin-bottom: 10px;"><strong>6단계:</strong> "거짓"을 구별하세요</p>
+                <p style="color: #e8f4fd; margin-bottom: 10px;"><strong>7단계:</strong> "희생"을 기억하세요</p>
+                <p style="color: #e8f4fd; margin-bottom: 10px;"><strong>8단계:</strong> "복수"로 마무리하세요</p>
+              </div>
+              <div class="hint-progress">
+                <p style="color: #4a9eff; font-weight: 600;">진행 상황: <span id="progress-text">0/8</span></p>
+                <div class="progress-bar">
+                  <div id="progress-fill" class="progress-fill"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div id="word-list" class="word-container"></div>
+        </div>
+
+        <div class="message" id="result"></div>
+      </div>
+    </div>
+
+    <!-- 오른쪽 사이드바 -->
+    <div class="sidebar">
+      <!-- 인벤토리와 일지가 여기에 자동으로 추가됩니다 -->
+    </div>
+  </div>
+
+  <style>
+    .puzzle {
+      background: linear-gradient(145deg, rgba(26, 26, 46, 0.9) 0%, rgba(22, 33, 62, 0.9) 100%);
+      border: 2px solid rgba(74, 158, 255, 0.4);
+      border-radius: 20px;
+      padding: 30px;
+      margin: 20px 0;
+      backdrop-filter: blur(15px);
+    }
+
+    .hint-section {
+      margin-bottom: 25px;
+      text-align: center;
+    }
+
+    .hint-button {
+      background: linear-gradient(135deg, rgba(255, 193, 7, 0.2) 0%, rgba(255, 152, 0, 0.2) 100%);
+      border: 2px solid rgba(255, 193, 7, 0.4);
+      border-radius: 12px;
+      padding: 12px 20px;
+      color: #ffc107;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hint-button:hover {
+      background: linear-gradient(135deg, rgba(255, 193, 7, 0.3) 0%, rgba(255, 152, 0, 0.3) 100%);
+      border-color: rgba(255, 193, 7, 0.6);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 193, 7, 0.3);
+    }
+
+    .hint-content {
+      background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 152, 0, 0.1) 100%);
+      border: 1px solid rgba(255, 193, 7, 0.3);
+      border-radius: 15px;
+      padding: 20px;
+      margin-top: 15px;
+      text-align: left;
+    }
+
+    .hint-text {
+      margin-bottom: 20px;
+    }
+
+    .hint-progress {
+      text-align: center;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: rgba(74, 158, 255, 0.2);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #4a9eff 0%, #4CAF50 100%);
+      width: 0%;
+      transition: width 0.5s ease;
+    }
+
+    .word-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .word-button {
+      background: linear-gradient(135deg, rgba(74, 158, 255, 0.2) 0%, rgba(41, 128, 185, 0.2) 100%);
+      border: 2px solid rgba(74, 158, 255, 0.4);
+      border-radius: 12px;
+      padding: 15px;
+      color: #e8f4fd;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      text-align: center;
+      min-height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .word-button:hover {
+      background: linear-gradient(135deg, rgba(74, 158, 255, 0.3) 0%, rgba(41, 128, 185, 0.3) 100%);
+      border-color: rgba(74, 158, 255, 0.6);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(74, 158, 255, 0.3);
+    }
+
+    .word-button.clicked {
+      background: linear-gradient(135deg, rgba(76, 175, 80, 0.3) 0%, rgba(56, 142, 60, 0.3) 100%);
+      border-color: rgba(76, 175, 80, 0.6);
+      cursor: default;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .word-button.clicked::after {
+      content: '✓';
+      position: absolute;
+      top: 5px;
+      right: 8px;
+      color: #4CAF50;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .word-button.disabled {
+      background: linear-gradient(135deg, rgba(108, 117, 125, 0.2) 0%, rgba(73, 80, 87, 0.2) 100%);
+      border-color: rgba(108, 117, 125, 0.4);
+      cursor: default;
+      opacity: 0.6;
+    }
+
+    .message {
+      background: linear-gradient(135deg, rgba(74, 158, 255, 0.1) 0%, rgba(41, 128, 185, 0.1) 100%);
+      border: 1px solid rgba(74, 158, 255, 0.3);
+      border-radius: 15px;
+      padding: 20px;
+      margin: 20px 0;
+      text-align: center;
+      color: #4a9eff;
+      font-weight: 600;
+      min-height: 40px;
+      backdrop-filter: blur(10px);
+    }
+
+    #scene-text {
+      background: linear-gradient(135deg, rgba(74, 158, 255, 0.1) 0%, rgba(41, 128, 185, 0.1) 100%);
+      border: 1px solid rgba(74, 158, 255, 0.3);
+      border-radius: 15px;
+      padding: 25px;
+      margin: 20px 0;
+      color: #e8f4fd;
+      font-size: 16px;
+      line-height: 1.6;
+      backdrop-filter: blur(10px);
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-10px); }
+      40%, 80% { transform: translateX(10px); }
+    }
+
+    .shake {
+      animation: shake 0.5s;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    .fade-in {
+      animation: fadeIn 1.5s forwards;
+      opacity: 0;
+    }
+
+    .success-message {
+      color: #4CAF50 !important;
+      border-color: rgba(76, 175, 80, 0.3) !important;
+    }
+
+    .error-message {
+      color: #f44336 !important;
+      border-color: rgba(244, 67, 54, 0.3) !important;
+    }
+
+    .hint-message {
+      color: #ffc107 !important;
+      border-color: rgba(255, 193, 7, 0.3) !important;
+    }
+  </style>
+
+  <script>
+    const words = ['기억', '조작', '실험', '탈출', '진실', '거짓', '희생', '복수'];
+    const correctOrder = ['기억', '조작', '실험', '탈출', '진실', '거짓', '희생', '복수'];
+    let clickedWords = [];
+    let isCompleted = false;
+    let hintShown = false;
+
+    function toggleHint() {
+      const hintContent = document.getElementById('hint-content');
+      const hintButton = document.querySelector('.hint-button');
+      
+      if (hintContent.style.display === 'none') {
+        hintContent.style.display = 'block';
+        hintButton.innerHTML = '<span class="button-icon">👁️</span><span class="button-text">힌트 숨기기</span>';
+        hintShown = true;
+        addJournalEntry('기억 퍼즐의 힌트를 확인했습니다.', 'observation');
+      } else {
+        hintContent.style.display = 'none';
+        hintButton.innerHTML = '<span class="button-icon">💡</span><span class="button-text">힌트 보기</span>';
+        hintShown = false;
+      }
+    }
+
+    function updateProgress() {
+      const progressText = document.getElementById('progress-text');
+      const progressFill = document.getElementById('progress-fill');
+      const progress = (clickedWords.length / correctOrder.length) * 100;
+      
+      progressText.textContent = `${clickedWords.length}/${correctOrder.length}`;
+      progressFill.style.width = `${progress}%`;
+    }
+
+    function renderWords() {
+      const wordList = document.getElementById('word-list');
+      wordList.innerHTML = '';
+      
+      // 단어들을 랜덤하게 섞기
+      const shuffledWords = [...words].sort(() => Math.random() - 0.5);
+      
+      shuffledWords.forEach(word => {
+        const button = document.createElement('button');
+        button.className = 'word-button fade-in';
+        button.textContent = word;
+        button.onclick = () => clickWord(word, button);
+        wordList.appendChild(button);
+      });
+    }
+
+    function clickWord(word, button) {
+      if (isCompleted || button.classList.contains('clicked')) return;
+      
+      clickedWords.push(word);
+      button.classList.add('clicked');
+      button.disabled = true;
+      
+      // 진행 상황 업데이트
+      updateProgress();
+      
+      // 클릭된 순서가 올바른지 확인
+      const isCorrect = clickedWords.every((w, i) => w === correctOrder[i]);
+      
+      if (isCorrect && clickedWords.length === correctOrder.length) {
+        // 성공
+        isCompleted = true;
+        showResult('🎉 기억이 복원되었습니다! 다음 방으로 이동합니다...', 'success');
+        addJournalEntry('격리실에서 기억 조각 퍼즐을 완성했습니다. 모든 기억이 선명해졌습니다.', 'clue');
+        
+        setTimeout(() => {
+          window.location.href = '../rooms6/containment.html';
+        }, 3000);
+      } else if (clickedWords.length === correctOrder.length) {
+        // 실패
+        showResult('❌ 기억 순서가 틀렸습니다. 힌트를 다시 확인해주세요.', 'error');
+        addJournalEntry('기억 조각 퍼즐을 틀렸습니다. 순서를 다시 생각해봐야겠습니다.', 'observation');
+        
+        setTimeout(() => {
+          resetPuzzle();
+        }, 2000);
+      } else {
+        // 진행 중
+        if (isCorrect) {
+          showResult(`✅ ${word} 선택됨 (${clickedWords.length}/${correctOrder.length}) - 올바른 순서입니다!`, 'success');
+        } else {
+          showResult(`⚠️ ${word} 선택됨 (${clickedWords.length}/${correctOrder.length}) - 순서가 틀렸습니다. 힌트를 확인하세요.`, 'hint-message');
+          // 틀린 순서일 때 힌트 자동 표시
+          if (!hintShown) {
+            setTimeout(() => {
+              toggleHint();
+            }, 1000);
+          }
+        }
+      }
+    }
+
+    function showResult(message, type) {
+      const result = document.getElementById('result');
+      result.textContent = message;
+      result.className = `message ${type === 'success' ? 'success-message' : type === 'error' ? 'error-message' : 'hint-message'}`;
+    }
+
+    function resetPuzzle() {
+      clickedWords = [];
+      isCompleted = false;
+      hintShown = false;
+      renderWords();
+      showResult('', '');
+      updateProgress();
+      
+      // 힌트 숨기기
+      const hintContent = document.getElementById('hint-content');
+      const hintButton = document.querySelector('.hint-button');
+      hintContent.style.display = 'none';
+      hintButton.innerHTML = '<span class="button-icon">💡</span><span class="button-text">힌트 보기</span>';
+    }
+
+    // 페이지 로드 시 초기화
+    document.addEventListener('DOMContentLoaded', () => {
+      // 일반 아이템만 초기화 (중요 아이템은 유지)
+      if (window.inventory) {
+        window.inventory.clearNormalInventory();
+      }
+      
+      renderWords();
+      updateProgress();
+      addJournalEntry('격리실에 도착했습니다. 기억 조작 기계가 작동하고 있습니다.', 'observation');
+    });
+  </script>
+</body>
+</html>

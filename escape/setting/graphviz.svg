@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="445pt" height="1048pt" viewBox="0.00 0.00 444.99 1047.80">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 1043.8)">
+<title>G</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-1043.8 440.99,-1043.8 440.99,4 -4,4"/>
+<!-- 1 -->
+<g id="node1" class="node">
+<title>1</title>
+<polygon fill="#f0f8ff" stroke="black" points="243.49,-1039.8 159.5,-1039.8 159.5,-1003 243.49,-1003 243.49,-1039.8"/>
+<text text-anchor="middle" x="201.5" y="-1025" font-family="NanumGothic" font-size="12.00">1. 병실</text>
+<text text-anchor="middle" x="201.5" y="-1010.6" font-family="NanumGothic" font-size="12.00">(기억 상실 시작)</text>
+</g>
+<!-- 2 -->
+<g id="node2" class="node">
+<title>2</title>
+<polygon fill="#f0f8ff" stroke="black" points="262.49,-900 140.5,-900 140.5,-863.2 262.49,-863.2 262.49,-900"/>
+<text text-anchor="middle" x="201.5" y="-885.2" font-family="NanumGothic" font-size="12.00">2. 로비</text>
+<text text-anchor="middle" x="201.5" y="-870.8" font-family="NanumGothic" font-size="12.00">(CCTV 단서, 코드 퍼즐)</text>
+</g>
+<!-- 1&#45;&gt;2 -->
+<g id="edge1" class="edge">
+<title>1-&gt;2</title>
+<path fill="none" stroke="black" d="M201.5,-1002.67C201.5,-979.62 201.5,-939.07 201.5,-911.53"/>
+<polygon fill="black" stroke="black" points="205,-911.78 201.5,-901.78 198,-911.78 205,-911.78"/>
+</g>
+<!-- 3 -->
+<g id="node3" class="node">
+<title>3</title>
+<polygon fill="#f0f8ff" stroke="black" points="258.66,-760.2 144.33,-760.2 144.33,-723.4 258.66,-723.4 258.66,-760.2"/>
+<text text-anchor="middle" x="201.5" y="-745.4" font-family="NanumGothic" font-size="12.00">3. 수술실</text>
+<text text-anchor="middle" x="201.5" y="-731" font-family="NanumGothic" font-size="12.00">[분기1: 기억 수용 여부]</text>
+</g>
+<!-- 2&#45;&gt;3 -->
+<g id="edge2" class="edge">
+<title>2-&gt;3</title>
+<path fill="none" stroke="black" d="M201.5,-862.87C201.5,-839.82 201.5,-799.27 201.5,-771.73"/>
+<polygon fill="black" stroke="black" points="205,-771.98 201.5,-761.98 198,-771.98 205,-771.98"/>
+</g>
+<!-- 4 -->
+<g id="node4" class="node">
+<title>4</title>
+<polygon fill="#f0f8ff" stroke="black" points="255.49,-620.4 147.5,-620.4 147.5,-583.6 255.49,-583.6 255.49,-620.4"/>
+<text text-anchor="middle" x="201.5" y="-605.6" font-family="NanumGothic" font-size="12.00">4. 관찰실</text>
+<text text-anchor="middle" x="201.5" y="-591.2" font-family="NanumGothic" font-size="12.00">(자기 인식, 감정 변화)</text>
+</g>
+<!-- 3&#45;&gt;4 -->
+<g id="edge3" class="edge">
+<title>3-&gt;4</title>
+<path fill="none" stroke="black" d="M201.5,-723.07C201.5,-700.02 201.5,-659.47 201.5,-631.93"/>
+<polygon fill="black" stroke="black" points="205,-632.18 201.5,-622.18 198,-632.18 205,-632.18"/>
+</g>
+<!-- 5 -->
+<g id="node5" class="node">
+<title>5</title>
+<polygon fill="#f0f8ff" stroke="black" points="260.16,-480.6 142.83,-480.6 142.83,-443.8 260.16,-443.8 260.16,-480.6"/>
+<text text-anchor="middle" x="201.5" y="-465.8" font-family="NanumGothic" font-size="12.00">5. 격리실</text>
+<text text-anchor="middle" x="201.5" y="-451.4" font-family="NanumGothic" font-size="12.00">[사건1: 기억 주입, 폭주]</text>
+</g>
+<!-- 4&#45;&gt;5 -->
+<g id="edge4" class="edge">
+<title>4-&gt;5</title>
+<path fill="none" stroke="black" d="M201.5,-583.27C201.5,-560.22 201.5,-519.67 201.5,-492.13"/>
+<polygon fill="black" stroke="black" points="205,-492.38 201.5,-482.38 198,-492.38 205,-492.38"/>
+</g>
+<!-- 6 -->
+<g id="node6" class="node">
+<title>6</title>
+<polygon fill="#f0f8ff" stroke="black" points="248.16,-340.8 154.83,-340.8 154.83,-304 248.16,-304 248.16,-340.8"/>
+<text text-anchor="middle" x="201.5" y="-326" font-family="NanumGothic" font-size="12.00">6. 폐쇄 구역</text>
+<text text-anchor="middle" x="201.5" y="-311.6" font-family="NanumGothic" font-size="12.00">[분기2: 최종 선택]</text>
+</g>
+<!-- 5&#45;&gt;6 -->
+<g id="edge5" class="edge">
+<title>5-&gt;6</title>
+<path fill="none" stroke="black" d="M201.5,-443.47C201.5,-420.42 201.5,-379.87 201.5,-352.33"/>
+<polygon fill="black" stroke="black" points="205,-352.58 201.5,-342.58 198,-352.58 205,-352.58"/>
+</g>
+<!-- 7H -->
+<g id="node7" class="node">
+<title>7H</title>
+<polygon fill="#d0ffd0" stroke="black" points="62.99,-188.8 0,-188.8 0,-152 62.99,-152 62.99,-188.8"/>
+<text text-anchor="middle" x="31.5" y="-174" font-family="NanumGothic" font-size="12.00">7. 탈출구</text>
+<text text-anchor="middle" x="31.5" y="-159.6" font-family="NanumGothic" font-size="12.00">(해피 엔딩)</text>
+</g>
+<!-- 6&#45;&gt;7H -->
+<g id="edge6" class="edge">
+<title>6-&gt;7H</title>
+<path fill="none" stroke="black" d="M161.02,-303.62C136.93,-291.68 106.82,-274.27 84.53,-253 68.23,-237.45 54.52,-215.96 45.13,-198.94"/>
+<polygon fill="black" stroke="black" points="48.35,-197.54 40.56,-190.35 42.16,-200.82 48.35,-197.54"/>
+<text text-anchor="middle" x="124.01" y="-243.4" font-family="Times,serif" font-size="10.00">(기억 수용 + 감정 유지</text>
+</g>
+<!-- 7B -->
+<g id="node8" class="node">
+<title>7B</title>
+<polygon fill="#ffe0e0" stroke="black" points="232.99,-188.8 170,-188.8 170,-152 232.99,-152 232.99,-188.8"/>
+<text text-anchor="middle" x="201.5" y="-174" font-family="NanumGothic" font-size="12.00">7. 탈출구</text>
+<text text-anchor="middle" x="201.5" y="-159.6" font-family="NanumGothic" font-size="12.00">(배드 엔딩)</text>
+</g>
+<!-- 6&#45;&gt;7B -->
+<g id="edge7" class="edge">
+<title>6-&gt;7B</title>
+<path fill="none" stroke="black" d="M194.6,-303.71C188.98,-287.27 182.39,-262.04 185.03,-239.8 186.6,-226.56 189.82,-212.18 193,-200.04"/>
+<polygon fill="black" stroke="black" points="196.31,-201.22 195.59,-190.65 189.56,-199.36 196.31,-201.22"/>
+<text text-anchor="middle" x="220.76" y="-243.4" font-family="Times,serif" font-size="10.00">기억 거부 + 무력감 )</text>
+</g>
+<!-- 7T -->
+<g id="node9" class="node">
+<title>7T</title>
+<polygon fill="#e0d0ff" stroke="black" points="391,-188.8 336,-188.8 336,-152 391,-152 391,-188.8"/>
+<text text-anchor="middle" x="363.5" y="-174" font-family="NanumGothic" font-size="12.00">7. 제어실</text>
+<text text-anchor="middle" x="363.5" y="-159.6" font-family="NanumGothic" font-size="12.00">(진 엔딩)</text>
+</g>
+<!-- 6&#45;&gt;7T -->
+<g id="edge8" class="edge">
+<title>6-&gt;7T</title>
+<path fill="none" stroke="black" d="M220.72,-303.6C249.34,-277.1 303.29,-227.14 336.06,-196.81"/>
+<polygon fill="black" stroke="black" points="338.23,-199.56 343.19,-190.2 333.48,-194.43 338.23,-199.56"/>
+<text text-anchor="middle" x="343.06" y="-243.1" font-family="Times,serif" font-size="11.00">기억 수용 + 분노 + 파괴 선택</text>
+</g>
+<!-- S -->
+<g id="node10" class="node">
+<title>S</title>
+<polygon fill="#fffacd" stroke="black" points="430.99,-36.8 290,-36.8 290,0 436.99,0 436.99,-30.8 430.99,-36.8"/>
+<polyline fill="none" stroke="black" points="430.99,-36.8 430.99,-30.8"/>
+<polyline fill="none" stroke="black" points="436.99,-30.8 430.99,-30.8"/>
+<text text-anchor="middle" x="363.5" y="-22" font-family="NanumGothic" font-size="12.00">숨겨진 방</text>
+<text text-anchor="middle" x="363.5" y="-7.6" font-family="NanumGothic" font-size="12.00">(진엔딩 조건 만족 시 접근 가능)</text>
+</g>
+<!-- 7T&#45;&gt;S -->
+<g id="edge9" class="edge">
+<title>7T-&gt;S</title>
+<path fill="none" stroke="black" d="M363.5,-151.6C363.5,-126.12 363.5,-78.94 363.5,-48.37"/>
+<polygon fill="black" stroke="black" points="367,-48.69 363.5,-38.69 360,-48.69 367,-48.69"/>
+<text text-anchor="middle" x="395.12" y="-91.1" font-family="Times,serif" font-size="11.00">진엔딩 조건 충족</text>
+</g>
+</g>
+</svg>
